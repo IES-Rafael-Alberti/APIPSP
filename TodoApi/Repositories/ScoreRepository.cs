@@ -12,8 +12,7 @@ namespace TodoApi.Services
         private readonly IMongoCollection<Score> _scores;
         
         public ScoreRepository(IConfiguration configuration)
-        {
-            // Get MongoDB connection string from configuration
+        { 
             var connectionString = configuration["MONGO_URI"];
             
             if (string.IsNullOrEmpty(connectionString))
@@ -23,7 +22,7 @@ namespace TodoApi.Services
             
             // Create MongoDB client and connect to database
             var client = new MongoClient(connectionString);
-            var database = client.GetDatabase("ScoreDatabase"); // You can adjust database name if needed
+            var database = client.GetDatabase("ScoreDatabase");
             _scores = database.GetCollection<Score>("Puntuaciones");
         }
         
@@ -44,7 +43,6 @@ namespace TodoApi.Services
         
         public async Task<Score> CreateAsync(ScoreDTO scoreDto)
         {
-            // Generate a new ID (you might want to use MongoDB's ObjectId instead)
             var lastScore = await _scores.Find(_ => true).SortByDescending(s => s.Id).FirstOrDefaultAsync();
             long newId = (lastScore?.Id ?? 0) + 1;
             
