@@ -38,6 +38,14 @@ namespace TodoApi.Controllers
 
             return Ok(score);
         }
+        
+        // GET: api/Scores/top
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<Score>>> GetTopScores([FromQuery] int limit = 5)
+        {
+            var topScores = await _scoreRepository.GetTopScoresAsync(limit);
+            return Ok(topScores);
+        }
 
         // GET: api/Scores/player/John
         [HttpGet("player/{playerName}")]
@@ -55,6 +63,7 @@ namespace TodoApi.Controllers
             {
                 return BadRequest("Player name is required");
             }
+            Console.WriteLine("Creating score");
 
             var createdScore = await _scoreRepository.CreateAsync(scoreDto);
             return CreatedAtAction(nameof(GetScore), new { id = createdScore.Id }, createdScore);
@@ -68,6 +77,7 @@ namespace TodoApi.Controllers
             {
                 return BadRequest("Player name is required");
             }
+            Console.WriteLine("Sending top scores");
 
             var result = await _scoreRepository.UpdateAsync(id, scoreDto);
             

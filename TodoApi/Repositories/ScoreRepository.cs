@@ -31,6 +31,15 @@ namespace TodoApi.Services
             return await _scores.Find(_ => true).ToListAsync();
         }
         
+        public async Task<List<Score>> GetTopScoresAsync(int limit = 5)
+        {
+            // Devuelve las 5 puntuaciones mas altas
+            return await _scores.Find(_ => true)
+                .SortByDescending(s => s.Points)
+                .Limit(limit)
+                .ToListAsync();
+        }
+        
         public async Task<Score> GetByIdAsync(long id)
         {
             return await _scores.Find(score => score.Id == id).FirstOrDefaultAsync();
